@@ -29,7 +29,6 @@ const Dashboard = () => {
     try {
       setLoading(true);
       const listsData = await listService.getLists();
-      console.log('Fetched lists:', listsData); // Debug log
       
       // Handle different response formats
       if (Array.isArray(listsData)) {
@@ -113,47 +112,30 @@ const Dashboard = () => {
 
   const handleCreateList = async (e) => {
     e.preventDefault();
-    console.log('Create list button clicked');
-    console.log('List data being sent:', newList);
     
     try {
-      console.log('Sending request to create list...');
       const response = await listService.createList(newList);
-      console.log('List creation raw response:', response);
       
       // Handle different response formats
       let newListItem;
       if (response && response.data) {
-        console.log('Response has data property:', response.data);
         newListItem = response.data.data || response.data;
       } else if (response && response.success && response.data) {
-        console.log('Response has success and data properties');
         newListItem = response.data;
       } else {
-        console.log('Using response directly as list item');
         newListItem = response;
       }
       
-      console.log('Final new list item:', newListItem);
-      
       // Add the new list to the state
-      setLists(prevLists => {
-        console.log('Previous lists:', prevLists);
-        const updatedLists = [...prevLists, newListItem];
-        console.log('Updated lists:', updatedLists);
-        return updatedLists;
-      });
+      setLists(prevLists => [...prevLists, newListItem]);
       
       setNewList({ name: '' });
       setShowListModal(false);
       
       // Refresh lists from server to ensure we have the correct data
-      console.log('Fetching updated lists from server...');
       fetchLists();
     } catch (err) {
-      console.error('Error creating list (detailed):', err);
-      console.error('Error message:', err.message);
-      console.error('Error response:', err.response?.data);
+      console.error('Error creating list:', err);
       setError('Failed to create list. Please try again.');
     }
   };

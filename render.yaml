@@ -1,0 +1,35 @@
+services:
+  # Backend API service
+  - type: web
+    name: task-app-backend
+    env: node
+    buildCommand: cd backend && npm install
+    startCommand: node backend/server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: FRONTEND_URL
+        fromService:
+          name: task-app-frontend
+          type: web
+          property: url
+
+  # Frontend service
+  - type: web
+    name: task-app-frontend
+    env: static
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: ./frontend/dist
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          name: task-app-backend
+          type: web
+          property: url
+        append: /api
