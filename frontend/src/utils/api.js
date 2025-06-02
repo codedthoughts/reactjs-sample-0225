@@ -53,6 +53,50 @@ export const authService = {
 };
 
 // Task services
+export const listService = {
+  getLists: async () => {
+    try {
+      console.log('Sending GET request to /lists');
+      const response = await api.get('/lists');
+      console.log('GET /lists raw response:', response);
+      
+      // Handle different response formats
+      if (response.data && response.data.data) {
+        console.log('Returning response.data.data:', response.data.data);
+        return response.data.data; // For responses like { success: true, data: [...] }
+      }
+      console.log('Returning response.data:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching lists (detailed):', error);
+      console.error('Error message:', error.message);
+      console.error('Error response:', error.response?.data);
+      throw error;
+    }
+  },
+  createList: async (listData) => {
+    try {
+      console.log('Sending POST request to /lists with data:', listData);
+      const response = await api.post('/lists', listData);
+      console.log('POST /lists raw response:', response);
+      
+      // Return the actual list object, not the wrapper
+      if (response.data && response.data.data) {
+        console.log('Returning response.data.data:', response.data.data);
+        return response.data.data; // For responses like { success: true, data: {...} }
+      }
+      console.log('Returning response.data:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('Error creating list (detailed):', error);
+      console.error('Error message:', error.message);
+      console.error('Error response:', error.response?.data);
+      throw error;
+    }
+  }
+};
+
+// Update taskService to include listId
 export const taskService = {
   getTasks: async () => {
     const response = await api.get('/tasks');
