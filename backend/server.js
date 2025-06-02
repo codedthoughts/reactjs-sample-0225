@@ -1,6 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
+const path = require('path');
 const connectDB = require('./config/db');
 
 dotenv.config();
@@ -36,9 +37,23 @@ app.use('/api/auth', authRoutes);
 app.use('/api/tasks', taskRoutes);
 app.use('/api/lists', listRoutes);
 
-app.get('/', (req, res) => {
+// API status route
+app.get('/api/status', (req, res) => {
   res.send('API is running...');
 });
+
+// Serve static assets in production
+if (process.env.NODE_ENV === 'production') {
+  // Set static folder
+  const frontendBuildPath = path.join(__dirname, '../frontend/dist');
+  
+  app.use(express.static(frontendBuildPath));
+
+  // Any route that is not an API route should be handled by the React app
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(frontendBuildPath, 'index.html'));
+  });
+}
 
 const PORT = process.env.PORT || 5000;
 
