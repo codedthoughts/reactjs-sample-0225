@@ -63,7 +63,11 @@ export const taskService = {
     return response.data;
   },
   updateTask: async (taskId, updates) => {
-    const response = await axios.put(`/api/tasks/${taskId}`, updates);
+    const response = await api.put(`/tasks/${taskId}`, updates);
+    return response.data;
+  },
+  deleteTask: async (taskId) => {
+    const response = await api.delete(`/tasks/${taskId}`);
     return response.data;
   }
 };

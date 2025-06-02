@@ -16,6 +16,10 @@ const taskSchema = new mongoose.Schema({
     type: Date,
     required: [true, 'Please add a due date']
   },
+  completed: {
+    type: Boolean,
+    default: false
+  },
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',

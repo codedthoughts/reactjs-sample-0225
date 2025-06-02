@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { taskService } from '../utils/api';
+import logo from '../assets/logo.png';
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -92,7 +93,7 @@ const Dashboard = () => {
         <div className="bg-blue-900 rounded-lg p-6">
           <div className="flex items-center mb-6">
             <img
-              src="/logo.png"
+              src={logo}
               alt="Logo"
               className="w-8 h-8 mr-3"
             />
